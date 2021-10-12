@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 public class Producer {
-    public static final String QUEUE_NAME="hello";
+    public static final String QUEUE_NAME = "hello";
 
 
     public static void main(String[] args) throws IOException, TimeoutException {
@@ -19,9 +19,9 @@ public class Producer {
         factory.setPassword("123");
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
-        channel.queueDeclare(QUEUE_NAME,false,false,false,null);
-        String message="hello world";
-        channel.basicPublish("",QUEUE_NAME,null,message.getBytes(StandardCharsets.UTF_8));
+        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        String message = "hello world";
+        channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
         System.out.println("发送消息完成");
     }
 }

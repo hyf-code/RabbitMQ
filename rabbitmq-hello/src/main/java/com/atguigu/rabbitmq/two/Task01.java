@@ -7,15 +7,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Task01 {
-    public static final String QUEUE_NAME="hello";
+    public static final String QUEUE_NAME = "hello";
 
     public static void main(String[] args) throws Exception {
         Channel channel = RabbitMqUtils.getChannel();
-        channel.queueDeclare(QUEUE_NAME,false,false,false,null);
+        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
         Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNext()){
+        while (scanner.hasNext()) {
             String message = scanner.next();
-            channel.basicPublish("",QUEUE_NAME,null,message.getBytes(StandardCharsets.UTF_8));
+            channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
             System.out.println("消息发送完成：" + message);
         }
     }

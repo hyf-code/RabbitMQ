@@ -6,7 +6,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 
 public class Work03 {
-    public static final String TASK_QUEUE_NAME="ack_queue";
+    public static final String TASK_QUEUE_NAME = "ack_queue";
 
     public static void main(String[] args) throws Exception {
         Channel channel = RabbitMqUtils.getChannel();
@@ -29,7 +29,7 @@ public class Work03 {
         CancelCallback cancelCallback = (consumerTag) -> {
             System.out.println(consumerTag + "消费者取消消费接口回调逻辑");
         };
-        int prefetchCount=2;
+        int prefetchCount = 2;
         channel.basicQos(prefetchCount);
         //采用手动应答
         boolean autoAck = false;

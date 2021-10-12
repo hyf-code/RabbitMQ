@@ -17,19 +17,19 @@ public class ReceiveLogs02 {
     public static void main(String[] args) throws Exception {
         Channel channel = RabbitMqUtils.getChannel();
 
-        DeliverCallback deliverCallback=(consumerTag, delivery)->{
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
             System.out.println(" 接收队列:" + "Q1" + " 绑定键:" + delivery.getEnvelope().getRoutingKey() + ",消息:" + message);
         };
-        CancelCallback cancelCallback= (message)->{
-            System.out.println("接受失败："+message);
+        CancelCallback cancelCallback = (message) -> {
+            System.out.println("接受失败：" + message);
         };
-        String routeKey="*.orange.*";
+        String routeKey = "*.orange.*";
         channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.TOPIC);
         channel.queueDeclare("Q1", false, false, false, null);
-        channel.queueBind("Q1",EXCHANGE_NAME,routeKey);
+        channel.queueBind("Q1", EXCHANGE_NAME, routeKey);
 
         System.out.println("等待接受消息。。。。");
-        channel.basicConsume("Q1",true,deliverCallback,cancelCallback);
+        channel.basicConsume("Q1", true, deliverCallback, cancelCallback);
     }
 }
