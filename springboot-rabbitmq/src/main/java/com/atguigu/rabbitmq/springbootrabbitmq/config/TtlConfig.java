@@ -17,6 +17,8 @@ public class TtlConfig {
     public static final String QUEUE_A="QA";
     //声明普通队列
     public static final String QUEUE_B="QB";
+    //声明普通队列
+    public static final String QUEUE_C="QC";
     //声明死信队列
     public static final String DEAD_LETTER_QUEUE="QD";
 
@@ -47,6 +49,15 @@ public class TtlConfig {
         return QueueBuilder.durable(QUEUE_B).withArguments(arguments).build();
     }
 
+    @Bean("queueC")
+    public Queue queueC(){
+        HashMap<String, Object> arguments = new HashMap<>(3);
+        arguments.put("x-dead-letter-exchange",Y_DEAD_LETTER_EXCHANGE);
+        arguments.put("x-dead-letter-routing-key","YD");
+        return QueueBuilder.durable(QUEUE_C).withArguments(arguments).build();
+    }
+
+
     @Bean("queueD")
     public Queue queueD(){
         return QueueBuilder.durable(DEAD_LETTER_QUEUE).build();
@@ -61,6 +72,11 @@ public class TtlConfig {
     @Bean
     public Binding queueBBindX(@Qualifier("queueB") Queue queueB,@Qualifier("xExchange") DirectExchange xExchange){
         return BindingBuilder.bind(queueB).to(xExchange).with("XB");
+    }
+
+    @Bean
+    public Binding queueCBindX(@Qualifier("queueC") Queue queueC,@Qualifier("xExchange") DirectExchange xExchange){
+        return BindingBuilder.bind(queueC).to(xExchange).with("XC");
     }
 
     @Bean
