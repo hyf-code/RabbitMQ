@@ -1,5 +1,6 @@
 package com.atguigu.rabbitmq.springbootrabbitmq.controller;
 
+import com.atguigu.rabbitmq.springbootrabbitmq.config.DelayedConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,18 @@ public class SendMessageController {
         );
     }
 
+    //开始发消息
+    @GetMapping("/sendDelayedMessage/{message}/{ttlTime}")
+    public void sendDelayedMessage(@PathVariable String message,@PathVariable int ttlTime){
+        log.info("当前时间：{},发送一条信息给延队列:{}", new Date(), message);
 
+        rabbitTemplate.convertAndSend(DelayedConfig.DELAYED_EXCHANGE, DelayedConfig.DELAYED_ROUTING_KEY, message,
+                message1 -> {
+                    message1.getMessageProperties().setDelay(ttlTime);
+                    return message1;
+                }
+        );
+    }
 
     public static void main(String[] args) {
         HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
