@@ -1,7 +1,9 @@
 package com.atguigu.rabbitmq.springbootrabbitmq.controller;
 
+import com.atguigu.rabbitmq.springbootrabbitmq.config.ConfirmConfig;
 import com.atguigu.rabbitmq.springbootrabbitmq.config.DelayedConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,6 +78,14 @@ public class SendMessageController {
                     return message1;
                 }
         );
+    }
+
+    @GetMapping("/confirmSendMessage/{message}")
+    public void confirmSendMessage(@PathVariable String message){
+        log.info("当前时间：{},发送一条信息给确认队列:{}", new Date(), message);
+        CorrelationData correlationData = new CorrelationData();
+        correlationData.setId("123");
+        rabbitTemplate.convertAndSend(ConfirmConfig.CONFIRM_EXCHANGE, ConfirmConfig.CONFIRM_ROUTING_KEY+"12", message,correlationData);
     }
 
     public static void main(String[] args) {
